@@ -4,8 +4,7 @@ $(document).ready(function() {
 
 
 function bindEvents() {
-  // Bind functions which add, remove, and complete todos to the appropriate
-  // elements
+  $('form').bind('submit', addTodo);
 }
 
 function buildTodo(todoName) {
@@ -20,3 +19,23 @@ function buildTodo(todoName) {
 }
 
 //Create functions to add, remove and complete todos
+var addTodo = function(e) {
+  e.preventDefault();
+  $.ajax({
+    type: "POST",
+    url: "/add_todo",
+    data: $(this).serialize(),
+    dataType: "json"
+  })
+  .done(function(data){
+    $('.todo_list').append('<ul><li>'+data.todo_content+'</li><ul>')
+    console.log(data.todo_content)
+    debugger
+  });
+}
+var removeTodo = function(e) {
+
+}
+var completeTodo = function(e) {
+
+}

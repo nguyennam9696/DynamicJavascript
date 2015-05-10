@@ -1,19 +1,25 @@
 get '/' do
-  # Look in app/views/index.erb
+  @todos = Todo.all.reverse
   erb :index
 end
 
 post '/add_todo' do
-  todo = Todo.new(
+  @todo = Todo.create!(
     todo_content: params[:todo_content],
-    todos: params[:todos],
-    completed: params[:completed],
-    boolean: params[:boolean]
     )
-  if todo.save
-    redirect '/'
-  else
-    erb :index
-  end
+  content_type :json
+  return @todo.to_json
+end
+
+put '/complete/:id' do
+  todo = Todo.where(id: params[:id]).first
+  todo.completed = true
+  todo.save
+end
+
+delete '/delete/:id' do
+  todo = Todo.where(id: params[:id]).first
+  todo.destroy
+  redirect '/'
 end
 
